@@ -65,14 +65,15 @@
             this.checkBox40 = new System.Windows.Forms.CheckBox();
             this.checkBox41 = new System.Windows.Forms.CheckBox();
             this.checkBox42 = new System.Windows.Forms.CheckBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupTabuleiro = new System.Windows.Forms.GroupBox();
             this.btnTreinar = new System.Windows.Forms.Button();
             this.btnReiniciar = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.btnAdicionar = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelStatus = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelPadroes = new System.Windows.Forms.Label();
+            this.groupTabuleiro.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBox1
@@ -495,93 +496,60 @@
             this.checkBox42.UseVisualStyleBackColor = true;
             this.checkBox42.CheckedChanged += new System.EventHandler(this.checkBoxChanged);
             // 
-            // radioButton1
+            // groupTabuleiro
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(69, 17);
-            this.radioButton1.TabIndex = 42;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Vermelha";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 42);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(63, 17);
-            this.radioButton2.TabIndex = 43;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Amarela";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Location = new System.Drawing.Point(33, 26);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(77, 71);
-            this.groupBox1.TabIndex = 44;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Peça";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.checkBox24);
-            this.groupBox2.Controls.Add(this.checkBox1);
-            this.groupBox2.Controls.Add(this.checkBox29);
-            this.groupBox2.Controls.Add(this.checkBox2);
-            this.groupBox2.Controls.Add(this.checkBox30);
-            this.groupBox2.Controls.Add(this.checkBox3);
-            this.groupBox2.Controls.Add(this.checkBox31);
-            this.groupBox2.Controls.Add(this.checkBox6);
-            this.groupBox2.Controls.Add(this.checkBox32);
-            this.groupBox2.Controls.Add(this.checkBox5);
-            this.groupBox2.Controls.Add(this.checkBox33);
-            this.groupBox2.Controls.Add(this.checkBox4);
-            this.groupBox2.Controls.Add(this.checkBox34);
-            this.groupBox2.Controls.Add(this.checkBox7);
-            this.groupBox2.Controls.Add(this.checkBox35);
-            this.groupBox2.Controls.Add(this.checkBox14);
-            this.groupBox2.Controls.Add(this.checkBox36);
-            this.groupBox2.Controls.Add(this.checkBox13);
-            this.groupBox2.Controls.Add(this.checkBox37);
-            this.groupBox2.Controls.Add(this.checkBox12);
-            this.groupBox2.Controls.Add(this.checkBox38);
-            this.groupBox2.Controls.Add(this.checkBox11);
-            this.groupBox2.Controls.Add(this.checkBox39);
-            this.groupBox2.Controls.Add(this.checkBox10);
-            this.groupBox2.Controls.Add(this.checkBox40);
-            this.groupBox2.Controls.Add(this.checkBox9);
-            this.groupBox2.Controls.Add(this.checkBox41);
-            this.groupBox2.Controls.Add(this.checkBox8);
-            this.groupBox2.Controls.Add(this.checkBox42);
-            this.groupBox2.Controls.Add(this.checkBox28);
-            this.groupBox2.Controls.Add(this.checkBox15);
-            this.groupBox2.Controls.Add(this.checkBox27);
-            this.groupBox2.Controls.Add(this.checkBox16);
-            this.groupBox2.Controls.Add(this.checkBox26);
-            this.groupBox2.Controls.Add(this.checkBox17);
-            this.groupBox2.Controls.Add(this.checkBox25);
-            this.groupBox2.Controls.Add(this.checkBox18);
-            this.groupBox2.Controls.Add(this.checkBox23);
-            this.groupBox2.Controls.Add(this.checkBox19);
-            this.groupBox2.Controls.Add(this.checkBox22);
-            this.groupBox2.Controls.Add(this.checkBox20);
-            this.groupBox2.Controls.Add(this.checkBox21);
-            this.groupBox2.Location = new System.Drawing.Point(33, 114);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(172, 157);
-            this.groupBox2.TabIndex = 45;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Tabuleiro";
+            this.groupTabuleiro.Controls.Add(this.checkBox24);
+            this.groupTabuleiro.Controls.Add(this.checkBox1);
+            this.groupTabuleiro.Controls.Add(this.checkBox29);
+            this.groupTabuleiro.Controls.Add(this.checkBox2);
+            this.groupTabuleiro.Controls.Add(this.checkBox30);
+            this.groupTabuleiro.Controls.Add(this.checkBox3);
+            this.groupTabuleiro.Controls.Add(this.checkBox31);
+            this.groupTabuleiro.Controls.Add(this.checkBox6);
+            this.groupTabuleiro.Controls.Add(this.checkBox32);
+            this.groupTabuleiro.Controls.Add(this.checkBox5);
+            this.groupTabuleiro.Controls.Add(this.checkBox33);
+            this.groupTabuleiro.Controls.Add(this.checkBox4);
+            this.groupTabuleiro.Controls.Add(this.checkBox34);
+            this.groupTabuleiro.Controls.Add(this.checkBox7);
+            this.groupTabuleiro.Controls.Add(this.checkBox35);
+            this.groupTabuleiro.Controls.Add(this.checkBox14);
+            this.groupTabuleiro.Controls.Add(this.checkBox36);
+            this.groupTabuleiro.Controls.Add(this.checkBox13);
+            this.groupTabuleiro.Controls.Add(this.checkBox37);
+            this.groupTabuleiro.Controls.Add(this.checkBox12);
+            this.groupTabuleiro.Controls.Add(this.checkBox38);
+            this.groupTabuleiro.Controls.Add(this.checkBox11);
+            this.groupTabuleiro.Controls.Add(this.checkBox39);
+            this.groupTabuleiro.Controls.Add(this.checkBox10);
+            this.groupTabuleiro.Controls.Add(this.checkBox40);
+            this.groupTabuleiro.Controls.Add(this.checkBox9);
+            this.groupTabuleiro.Controls.Add(this.checkBox41);
+            this.groupTabuleiro.Controls.Add(this.checkBox8);
+            this.groupTabuleiro.Controls.Add(this.checkBox42);
+            this.groupTabuleiro.Controls.Add(this.checkBox28);
+            this.groupTabuleiro.Controls.Add(this.checkBox15);
+            this.groupTabuleiro.Controls.Add(this.checkBox27);
+            this.groupTabuleiro.Controls.Add(this.checkBox16);
+            this.groupTabuleiro.Controls.Add(this.checkBox26);
+            this.groupTabuleiro.Controls.Add(this.checkBox17);
+            this.groupTabuleiro.Controls.Add(this.checkBox25);
+            this.groupTabuleiro.Controls.Add(this.checkBox18);
+            this.groupTabuleiro.Controls.Add(this.checkBox23);
+            this.groupTabuleiro.Controls.Add(this.checkBox19);
+            this.groupTabuleiro.Controls.Add(this.checkBox22);
+            this.groupTabuleiro.Controls.Add(this.checkBox20);
+            this.groupTabuleiro.Controls.Add(this.checkBox21);
+            this.groupTabuleiro.Location = new System.Drawing.Point(27, 71);
+            this.groupTabuleiro.Name = "groupTabuleiro";
+            this.groupTabuleiro.Size = new System.Drawing.Size(172, 157);
+            this.groupTabuleiro.TabIndex = 45;
+            this.groupTabuleiro.TabStop = false;
+            this.groupTabuleiro.Text = "Tabuleiro";
             // 
             // btnTreinar
             // 
-            this.btnTreinar.Location = new System.Drawing.Point(73, 295);
+            this.btnTreinar.Location = new System.Drawing.Point(127, 246);
             this.btnTreinar.Name = "btnTreinar";
             this.btnTreinar.Size = new System.Drawing.Size(75, 23);
             this.btnTreinar.TabIndex = 46;
@@ -591,29 +559,78 @@
             // 
             // btnReiniciar
             // 
-            this.btnReiniciar.Location = new System.Drawing.Point(70, 338);
+            this.btnReiniciar.Location = new System.Drawing.Point(27, 288);
             this.btnReiniciar.Name = "btnReiniciar";
-            this.btnReiniciar.Size = new System.Drawing.Size(75, 23);
+            this.btnReiniciar.Size = new System.Drawing.Size(172, 63);
             this.btnReiniciar.TabIndex = 47;
-            this.btnReiniciar.Text = "Reiniciar";
+            this.btnReiniciar.Text = "GRANDE BOTÃO DE RECONHECIMENTO";
             this.btnReiniciar.UseVisualStyleBackColor = true;
+            // 
+            // btnAdicionar
+            // 
+            this.btnAdicionar.Location = new System.Drawing.Point(25, 246);
+            this.btnAdicionar.Name = "btnAdicionar";
+            this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
+            this.btnAdicionar.TabIndex = 48;
+            this.btnAdicionar.Text = "Adicionar";
+            this.btnAdicionar.UseVisualStyleBackColor = true;
+            this.btnAdicionar.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(27, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.TabIndex = 49;
+            this.label1.Text = "Status: ";
+            // 
+            // labelStatus
+            // 
+            this.labelStatus.AutoSize = true;
+            this.labelStatus.Location = new System.Drawing.Point(77, 13);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(55, 13);
+            this.labelStatus.TabIndex = 50;
+            this.labelStatus.Text = "Treinando";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(27, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(113, 13);
+            this.label2.TabIndex = 51;
+            this.label2.Text = "Padrões Adicionados: ";
+            // 
+            // labelPadroes
+            // 
+            this.labelPadroes.AutoSize = true;
+            this.labelPadroes.Location = new System.Drawing.Point(150, 29);
+            this.labelPadroes.Name = "labelPadroes";
+            this.labelPadroes.Size = new System.Drawing.Size(24, 13);
+            this.labelPadroes.TabIndex = 52;
+            this.labelPadroes.Text = "0/8";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(927, 537);
+            this.ClientSize = new System.Drawing.Size(231, 447);
+            this.Controls.Add(this.labelPadroes);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelStatus);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnAdicionar);
             this.Controls.Add(this.btnReiniciar);
             this.Controls.Add(this.btnTreinar);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupTabuleiro);
             this.Name = "Form1";
             this.Text = "Connect 4 Winner Probability";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.groupTabuleiro.ResumeLayout(false);
+            this.groupTabuleiro.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -661,12 +678,14 @@
         private System.Windows.Forms.CheckBox checkBox40;
         private System.Windows.Forms.CheckBox checkBox41;
         private System.Windows.Forms.CheckBox checkBox42;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupTabuleiro;
         private System.Windows.Forms.Button btnTreinar;
         private System.Windows.Forms.Button btnReiniciar;
+        private System.Windows.Forms.Button btnAdicionar;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelStatus;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelPadroes;
     }
 }
 

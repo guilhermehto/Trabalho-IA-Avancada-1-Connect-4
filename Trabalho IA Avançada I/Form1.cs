@@ -14,38 +14,34 @@ using ADReNA_API.NeuralNetwork;
 using DataSet = ADReNA_API.Data.DataSet;
 
 namespace Trabalho_IA_Avançada_I {
-    public partial class Form1 : Form  {
-
+    public partial class Form1 : Form {
+        private int[] _camadasIntermediarias = {16};
+        private List<double[,]> _padroesDeEntrada = new List<double[,]>();
+        private double[,] _padraoEntrada = new double[6,7];
+        private int _camadaDeEntrada = 6 * 7; // 6 linhas, 7 colunas
+        private static int _camdaDeSaida = 4; // Qual jogo deve ser o vencedor - numero de bits para contar até 8
         private DataSet _conjuntoDeTreinamento;
-        private INeuralNetwork _rna;
-        private int red = 0;
+        private Backpropagation _rna;
+        private int _azul = 0;
         private int[,] _posicoes;
+        private int conjuntoIndex = 0;
 
         public Form1() {
             InitializeComponent();
-            _conjuntoDeTreinamento = new DataSet(4);
-            _posicoes = new int[6,7];
-            var pos = 0;
-            for (int l = 0; l < 6; l++) {
-                for (int c = 0; c < 7; c++) {
-                    _conjuntoDeTreinamento.Add(new DataSetObject(new double[] {l,c,1,1}));
-                    Debug.WriteLine($"(Linha: {l}, Coluna: {c}");
-                    _posicoes[l, c] = pos;
-                    pos ++;
-                }
-            }
-
-            _rna = new Kohonen(4,10,300);
+            _rna = new Backpropagation(_camadaDeEntrada, _camdaDeSaida, _camadasIntermediarias);
+            _conjuntoDeTreinamento = new DataSet(_camadaDeEntrada, _camdaDeSaida);
+            btnTreinar.Enabled = false;
         }
         
 
         private void btnTreinar_Click(object sender, EventArgs e) {
             _rna.Learn(_conjuntoDeTreinamento);
 
-            KohonenNeuron[,] camada = ((Kohonen) _rna).GetCompetitiveLayer();
-            Console.WriteLine(camada);
+            //KohonenNeuron[,] camada = ((Kohonen) _rna).GetCompetitiveLayer();
+            //Console.WriteLine(camada);
         }
 
+        //Controla a cor dos checkboxes e adiciona-os aos padroes de entrada
         private void checkBoxChanged(object sender, EventArgs e) {
             var checkbox = (CheckBox) sender;
 
@@ -54,20 +50,47 @@ namespace Trabalho_IA_Avançada_I {
             }
 
             checkbox.Enabled = false;
-            checkbox.BackColor = red%2 == 0 ? Color.Blue : Color.Red;
+            checkbox.BackColor = _azul % 2 == 0 ? Color.Blue : Color.Red;
+
             var posicao = GetPosition(checkbox.Location);
-            var obj = new DataSetObject(new double [] { posicao[1],
+            //var pos = _posicoes[(int)posicao[1], (int)posicao[0]];
+
+            var p = new double[6,7];
+            //É uma peça azul
+            if (_azul % 2 == 0) {
+                /*p[(int)posicao[1], (int)posicao[0]] = 1;
+                _padroesDeEntrada.Add(p);*/
+                _padraoEntrada[(int) posicao[1], (int) posicao[0]] = 1;
+            } else { //É uma peça vermelha
+                /*p[(int)posicao[1], (int)posicao[0]] = 2;
+                _padroesDeEntrada.Add(p);*/
+                _padraoEntrada[(int)posicao[1], (int)posicao[0]] = 1;
+            }
+
+
+            /*
+            _padroesDeEntrada.Add(new double[pos, {
+                posicao[1],
+                posicao[0],
+                red % 2 == 0 ? 1 : 0,
+                0 }] );*/
+
+            /*var obj = new DataSetObject(new double [] { posicao[1],
                 posicao[0],
                 red %2 == 0 ? 1 : 0,
-                0 });
+                0 });*/
 
-            var pos = _posicoes[(int) posicao[1], (int) posicao[0]];
-
-
+            
+            
+            /*
             Debug.WriteLine("!ANTES:");
-            _conjuntoDeTreinamento.data[pos] = obj;
+            _conjuntoDeTreinamento.data[pos] = obj;*/
 
-            red++;
+            _azul++;
+        }
+
+        private void TreinarRna() {
+            
         }
 
         private double[] GetPosition(Point location) {
@@ -118,6 +141,77 @@ namespace Trabalho_IA_Avançada_I {
             }
 
             return position;
+        }
+
+        //Adicionar padrão de entrada
+        private void button1_Click(object sender, EventArgs e) {
+            var serializedPattern = SerializePattern(_padraoEntrada);
+            DataSetObject obj = null;
+            switch (_conjuntoDeTreinamento.Length()) {
+                case 0:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 0, 0, 0 });
+                    break;
+                case 1:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 0, 0, 1 });
+                    break;
+                case 2:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 0, 1, 0 });
+                    break;
+                case 3:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 0, 1, 1 });
+                    break;
+                case 4:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 1, 0, 0 });
+                    break;
+                case 5:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 1, 0, 1 });
+                    break;
+                case 6:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 1, 1, 0 });
+                    break;
+                case 7:
+                    obj = new DataSetObject(serializedPattern, new double[] { 0, 1, 1, 1 });
+                    break;
+            }
+            _conjuntoDeTreinamento.Add(obj);
+
+            //Resetar o tabuleiro
+            foreach (var control in groupTabuleiro.Controls) {
+                if (control.GetType() == typeof(CheckBox)) {
+                    ((CheckBox) control).BackColor = Color.Transparent;
+                    ((CheckBox) control).Checked = false;
+                    ((CheckBox) control).Enabled = true;
+                }
+            }
+
+            UpdateLabelPadroes();
+
+            //Resetar variáveis de controle
+            _azul = 0;
+            _padraoEntrada = new double[6,7];
+        }
+
+        //Transforma cada padrão de entrada em um vetor
+        private double[] SerializePattern(double[,] original) {
+            var result = new double[6 * 7]; // Vetor de retorno = 4 posições para cada posição no tabuleiro
+            var resultIndex = 0; // Controla o index no vetor de retorno
+            for (int i = 0; i < 6 ; i++) {
+                for (int z = 0; z < 7; z++) {
+                    result[resultIndex] = original[i, z];
+                    resultIndex++;
+                }
+            }
+
+            return result;
+        }
+
+        private void UpdateLabelPadroes() {
+            labelPadroes.Text = $"{_conjuntoDeTreinamento.Length()}/8";
+            if (_conjuntoDeTreinamento.Length() == 8) {
+                btnTreinar.Enabled = true;
+                btnAdicionar.Enabled = false;
+                labelStatus.Text = "Reconhecendo";
+            }
         }
     }
 }
