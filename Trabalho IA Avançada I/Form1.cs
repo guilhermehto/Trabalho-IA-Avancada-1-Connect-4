@@ -16,8 +16,9 @@ using DataSet = ADReNA_API.Data.DataSet;
 namespace Trabalho_IA_Avançada_I {
     public partial class Form1 : Form {
         private int[] _camadasIntermediarias = {16};
-        private List<double[,]> _padroesDeEntrada = new List<double[,]>();
+        private List<double[]> _padroesDeEntrada = new List<double[]>();
         private double[,] _padraoEntrada = new double[6,7];
+        private double[,] _reconhecimento = new double[6, 7];
         private int _camadaDeEntrada = 6 * 7; // 6 linhas, 7 colunas
         private static int _camdaDeSaida = 4; // Qual jogo deve ser o vencedor - numero de bits para contar até 8
         private DataSet _conjuntoDeTreinamento;
@@ -31,14 +32,15 @@ namespace Trabalho_IA_Avançada_I {
             _rna = new Backpropagation(_camadaDeEntrada, _camdaDeSaida, _camadasIntermediarias);
             _conjuntoDeTreinamento = new DataSet(_camadaDeEntrada, _camdaDeSaida);
             btnTreinar.Enabled = false;
+            btnReconhecer.Enabled = false;
+            groupTabuleiroReconhecido.Enabled = false;
         }
         
 
         private void btnTreinar_Click(object sender, EventArgs e) {
             _rna.Learn(_conjuntoDeTreinamento);
-
-            //KohonenNeuron[,] camada = ((Kohonen) _rna).GetCompetitiveLayer();
-            //Console.WriteLine(camada);
+            btnTreinar.Enabled = false;
+            btnReconhecer.Enabled = true;
         }
 
         //Controla a cor dos checkboxes e adiciona-os aos padroes de entrada
@@ -53,44 +55,23 @@ namespace Trabalho_IA_Avançada_I {
             checkbox.BackColor = _azul % 2 == 0 ? Color.Blue : Color.Red;
 
             var posicao = GetPosition(checkbox.Location);
-            //var pos = _posicoes[(int)posicao[1], (int)posicao[0]];
 
-            var p = new double[6,7];
             //É uma peça azul
             if (_azul % 2 == 0) {
-                /*p[(int)posicao[1], (int)posicao[0]] = 1;
-                _padroesDeEntrada.Add(p);*/
-                _padraoEntrada[(int) posicao[1], (int) posicao[0]] = 1;
+                if (btnReconhecer.Enabled) {
+                    _reconhecimento[(int) posicao[1], (int) posicao[0]] = 1;
+                } else {
+                    _padraoEntrada[(int)posicao[1], (int)posicao[0]] = 1;
+                }
             } else { //É uma peça vermelha
-                /*p[(int)posicao[1], (int)posicao[0]] = 2;
-                _padroesDeEntrada.Add(p);*/
-                _padraoEntrada[(int)posicao[1], (int)posicao[0]] = 1;
+                if (btnReconhecer.Enabled) {
+                    _reconhecimento[(int)posicao[1], (int)posicao[0]] = 2;
+                } else {
+                    _padraoEntrada[(int)posicao[1], (int)posicao[0]] = 2;
+                }
             }
-
-
-            /*
-            _padroesDeEntrada.Add(new double[pos, {
-                posicao[1],
-                posicao[0],
-                red % 2 == 0 ? 1 : 0,
-                0 }] );*/
-
-            /*var obj = new DataSetObject(new double [] { posicao[1],
-                posicao[0],
-                red %2 == 0 ? 1 : 0,
-                0 });*/
-
             
-            
-            /*
-            Debug.WriteLine("!ANTES:");
-            _conjuntoDeTreinamento.data[pos] = obj;*/
-
             _azul++;
-        }
-
-        private void TreinarRna() {
-            
         }
 
         private double[] GetPosition(Point location) {
@@ -145,8 +126,14 @@ namespace Trabalho_IA_Avançada_I {
 
         //Adicionar padrão de entrada
         private void button1_Click(object sender, EventArgs e) {
+            //Serializa o padrão
             var serializedPattern = SerializePattern(_padraoEntrada);
+
+            _padroesDeEntrada.Add(serializedPattern);
+
             DataSetObject obj = null;
+            
+            //Adicona o padrão com sua saída esperada em binário
             switch (_conjuntoDeTreinamento.Length()) {
                 case 0:
                     obj = new DataSetObject(serializedPattern, new double[] { 0, 0, 0, 0 });
@@ -176,13 +163,7 @@ namespace Trabalho_IA_Avançada_I {
             _conjuntoDeTreinamento.Add(obj);
 
             //Resetar o tabuleiro
-            foreach (var control in groupTabuleiro.Controls) {
-                if (control.GetType() == typeof(CheckBox)) {
-                    ((CheckBox) control).BackColor = Color.Transparent;
-                    ((CheckBox) control).Checked = false;
-                    ((CheckBox) control).Enabled = true;
-                }
-            }
+            ResetarTabuleiro();
 
             UpdateLabelPadroes();
 
@@ -191,7 +172,32 @@ namespace Trabalho_IA_Avançada_I {
             _padraoEntrada = new double[6,7];
         }
 
-        //Transforma cada padrão de entrada em um vetor
+
+        private void ResetarTabuleiro() {
+            foreach (var control in groupTabuleiro.Controls) {
+                if (control.GetType() == typeof(CheckBox)) {
+                    ((CheckBox)control).BackColor = Color.Transparent;
+                    ((CheckBox)control).Checked = false;
+                    ((CheckBox)control).Enabled = true;
+                }
+            }
+
+            //Se estamos reconhecendo, resetar tabuleiro de reconhecimento e variável de entrada
+            if (btnReconhecer.Enabled) {
+                _azul = 0;
+                _reconhecimento = new double[6, 7];
+                foreach (var control in groupTabuleiroReconhecido.Controls) {
+                    if (control.GetType() == typeof(CheckBox)) {
+                        ((CheckBox)control).BackColor = Color.Transparent;
+                        ((CheckBox)control).Checked = false;
+                        ((CheckBox)control).Enabled = true;
+                    }
+                }
+            }
+
+        }
+
+        //Transforma um padrão de entrada em um vetor
         private double[] SerializePattern(double[,] original) {
             var result = new double[6 * 7]; // Vetor de retorno = 4 posições para cada posição no tabuleiro
             var resultIndex = 0; // Controla o index no vetor de retorno
@@ -212,6 +218,43 @@ namespace Trabalho_IA_Avançada_I {
                 btnAdicionar.Enabled = false;
                 labelStatus.Text = "Reconhecendo";
             }
+        }
+
+        private void btnReconhecer_Click(object sender, EventArgs e) {
+            var serializedPattern = SerializePattern(_reconhecimento);
+            var resultado = _rna.Recognize(serializedPattern);
+            var resultadoBinario = "";
+            foreach (var b in resultado) {
+                if (b >= 0.5f) {
+                    resultadoBinario += "1";
+                } else {
+                    resultadoBinario += "0";
+                }
+            }
+
+            
+
+            var posPadrao = Convert.ToInt32(resultadoBinario, 2);
+
+            var padraoReconhecido = _padroesDeEntrada.ElementAt(posPadrao);
+
+            Console.WriteLine(padraoReconhecido);
+            Console.WriteLine(padraoReconhecido);
+
+            ResetarTabuleiro();
+            //Escrever padrao
+            var checkboxes = groupTabuleiroReconhecido.Controls.OfType<CheckBox>();
+
+            for (int i = 0; i < padraoReconhecido.Length; i++) {
+                if (padraoReconhecido[i] == 0) {
+                    continue;
+                }
+                
+                checkboxes.ElementAt(i).BackColor = padraoReconhecido[i] == 1 ? Color.Blue : Color.Red;
+                checkboxes.ElementAt(i).Checked = true;
+            }
+            
+
         }
     }
 }
