@@ -29,14 +29,18 @@ namespace Trabalho_IA_Avançada_I {
 
         public Form1() {
             InitializeComponent();
-            _rna = new Backpropagation(_camadaDeEntrada, _camdaDeSaida, _camadasIntermediarias);
+            _rna = new Backpropagation(_camadaDeEntrada, _camdaDeSaida, _camadasIntermediarias) {
+                ETA = 0.3f,
+                Error = 0.005f,
+                maxIterationNumber = 5000
+            };
             _conjuntoDeTreinamento = new DataSet(_camadaDeEntrada, _camdaDeSaida);
             btnTreinar.Enabled = false;
             btnReconhecer.Enabled = false;
             groupTabuleiroReconhecido.Enabled = false;
         }
         
-
+        //Treina a RNA
         private void btnTreinar_Click(object sender, EventArgs e) {
             _rna.Learn(_conjuntoDeTreinamento);
             btnTreinar.Enabled = false;
@@ -74,6 +78,7 @@ namespace Trabalho_IA_Avançada_I {
             _azul++;
         }
 
+        //Transforma a posição global do checkbox em uma posição no vetor
         private double[] GetPosition(Point location) {
             double[] position = new double[2];
             switch (location.X) {
@@ -172,7 +177,7 @@ namespace Trabalho_IA_Avançada_I {
             _padraoEntrada = new double[6,7];
         }
 
-
+        //Reseta os tabuleiros
         private void ResetarTabuleiro() {
             foreach (var control in groupTabuleiro.Controls) {
                 if (control.GetType() == typeof(CheckBox)) {
@@ -211,6 +216,7 @@ namespace Trabalho_IA_Avançada_I {
             return result;
         }
 
+        //Atualiza os labels de informação para o usuário
         private void UpdateLabelPadroes() {
             labelPadroes.Text = $"{_conjuntoDeTreinamento.Length()}/8";
             if (_conjuntoDeTreinamento.Length() == 8) {
@@ -220,6 +226,7 @@ namespace Trabalho_IA_Avançada_I {
             }
         }
 
+        //Reconhece o jogo
         private void btnReconhecer_Click(object sender, EventArgs e) {
             var serializedPattern = SerializePattern(_reconhecimento);
             var resultado = _rna.Recognize(serializedPattern);
@@ -244,8 +251,8 @@ namespace Trabalho_IA_Avançada_I {
             ResetarTabuleiro();
             //Escrever padrao
             var checkboxes = groupTabuleiroReconhecido.Controls.OfType<CheckBox>();
-
             for (int i = 0; i < padraoReconhecido.Length; i++) {
+                Debug.WriteLine(checkboxes.ElementAt(i).Name);
                 if (padraoReconhecido[i] == 0) {
                     continue;
                 }
@@ -253,8 +260,6 @@ namespace Trabalho_IA_Avançada_I {
                 checkboxes.ElementAt(i).BackColor = padraoReconhecido[i] == 1 ? Color.Blue : Color.Red;
                 checkboxes.ElementAt(i).Checked = true;
             }
-            
-
         }
     }
 }
